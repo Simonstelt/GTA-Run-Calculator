@@ -767,7 +767,7 @@
       if (isRaw) {
         modeTag.textContent = 'Raw Gather';
         modeTag.className   = 'tag tag-mode-raw';
-      } else if (item.source === 'heist') {
+      } else if (item.source === 'heist' || item.source === 'other') {
         modeTag.textContent = 'Direct Sell';
         modeTag.className   = 'tag tag-mode-proc';
       } else {
