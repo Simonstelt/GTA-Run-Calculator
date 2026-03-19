@@ -167,6 +167,68 @@
     .mode-hint { font-size: 0.75rem; color: #9aa0b8; margin-top: 8px; font-style: italic; }
     .mode-hint.raw { color: #f2a019; }
 
+    /* Comp type toggle */
+    .comp-toggle {
+      display: flex;
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 9px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .comp-btn {
+      flex: 1;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 6px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: transparent;
+      color: #9aa0b8;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .comp-btn:hover { color: #fff; }
+    .comp-btn.active { background: #f26419; color: #ffffff; }
+    .comp-btn .comp-sub { display: block; font-size: 0.62rem; font-weight: 400; opacity: 0.85; margin-top: 1px; }
+
+    /* Fill toggle (below actions) */
+    .fill-toggle-wrap { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid #2e3347; }
+    .fill-toggle-wrap.visible { display: block; }
+    .fill-divider {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #f26419;
+      margin-bottom: 10px;
+    }
+
+    /* Comp result box */
+    .comp-box {
+      margin-top: 10px;
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 10px;
+      padding: 14px 20px;
+      text-align: center;
+      display: none;
+    }
+    .comp-box.visible { display: block; }
+    .comp-box-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 4px;
+    }
+    .comp-box-value { font-size: 1.7rem; font-weight: 700; color: #4ac38c; }
+    .comp-box-currency { font-size: 0.85rem; color: #9aa0b8; margin-top: 2px; }
+
     /* Tier buttons */
     .tier-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
     .tier-btn {
@@ -402,30 +464,49 @@
       </select>
     </div>
 
-    <div class="field mode-toggle-wrap" id="modeToggleWrap">
-      <label>Run Mode</label>
-      <div class="mode-toggle">
-        <button class="mode-btn active" id="btnProcessed" onclick="setMode('processed')">
-          Processed / Sell
-          <span class="mode-sub">Fill vehicle with finished goods</span>
-        </button>
-        <button class="mode-btn" id="btnRaw" onclick="setMode('raw')">
-          Raw Gather
-          <span class="mode-sub">Gather raw → process → sell</span>
-        </button>
-      </div>
-      <div class="mode-hint" id="modeHint">Capacity based on processed item weight.</div>
-    </div>
-
     <div class="section-divider">Processor Tier</div>
 
     <div class="field">
       <div class="tier-grid" id="tierGrid"></div>
     </div>
 
+    <div class="section-divider">Comp Type <span style="font-weight:400;color:#9aa0b8;font-size:0.65rem;letter-spacing:0">(staff / tickets)</span></div>
+
+    <div class="field">
+      <div class="comp-toggle">
+        <button class="comp-btn active" id="btnCompP2P" onclick="setComp('p2p')">
+          Player → Player
+          <span class="comp-sub">100% — no modifier</span>
+        </button>
+        <button class="comp-btn" id="btnCompSrvProc" onclick="setComp('server-proc')">
+          Server (Processed)
+          <span class="comp-sub">70% of value</span>
+        </button>
+        <button class="comp-btn" id="btnCompSrvRaw" onclick="setComp('server-raw')">
+          Server (Unprocessed)
+          <span class="comp-sub">33% of value</span>
+        </button>
+      </div>
+    </div>
+
     <div class="actions">
       <button class="btn btn-primary" onclick="calculate()">Calculate</button>
       <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
+    </div>
+
+    <div class="fill-toggle-wrap" id="fillToggleWrap">
+      <div class="fill-divider">Vehicle Fill</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btnFillProcessed" onclick="quickFill('processed')">
+          Full — Processed / Sell
+          <span class="mode-sub">Vehicle loaded with finished goods</span>
+        </button>
+        <button class="mode-btn" id="btnFillRaw" onclick="quickFill('raw')">
+          Full — After Raw Run
+          <span class="mode-sub">Gathered raw → processed (vehicle not full)</span>
+        </button>
+      </div>
+      <div class="mode-hint" id="fillHint">Vehicle auto-filled to max with processed goods.</div>
     </div>
   </div>
 
@@ -527,6 +608,12 @@
       <div class="total-label">Total Run Value</div>
       <div class="total-value" id="resTotalValue"></div>
       <div class="total-currency">British Pounds</div>
+    </div>
+
+    <div class="comp-box" id="compBox">
+      <div class="comp-box-label" id="compBoxLabel">Server Comp</div>
+      <div class="comp-box-value" id="compBoxValue"></div>
+      <div class="comp-box-currency">British Pounds</div>
     </div>
   </div>
 
@@ -650,6 +737,8 @@
     /* ── STATE ── */
     let selectedTier = 0;
     let runMode = 'processed';
+    let compType = 'p2p';
+    const compMults = { 'p2p': 1.0, 'server-proc': 0.70, 'server-raw': 0.33 };
 
     /* ── BUILD UI ── */
 
@@ -702,15 +791,17 @@
 
     function setMode(mode) {
       runMode = mode;
-      document.getElementById('btnProcessed').classList.toggle('active', mode === 'processed');
-      document.getElementById('btnRaw').classList.toggle('active', mode === 'raw');
-      const hint = document.getElementById('modeHint');
-      if (mode === 'raw') {
-        hint.textContent = 'Fill vehicle with raw items (heavier) → process → same unit count, lighter weight at sell.';
-        hint.className = 'mode-hint raw';
-      } else {
-        hint.textContent = 'Capacity based on processed item weight.';
-        hint.className = 'mode-hint';
+      document.getElementById('btnFillProcessed').classList.toggle('active', mode === 'processed');
+      document.getElementById('btnFillRaw').classList.toggle('active', mode === 'raw');
+      const hint = document.getElementById('fillHint');
+      if (hint) {
+        if (mode === 'raw') {
+          hint.textContent = 'Vehicle filled with raw goods — after processing, same unit count but lighter. Vehicle will not be full.';
+          hint.className = 'mode-hint raw';
+        } else {
+          hint.textContent = 'Vehicle auto-filled to max with processed (finished) goods.';
+          hint.className = 'mode-hint';
+        }
       }
       tryAutoFillUnits();
     }
@@ -727,17 +818,36 @@
 
     function onItemChange() {
       const item = getSelectedItem();
-      const wrap = document.getElementById('modeToggleWrap');
-      if (item && item.rawWeight !== null) {
-        wrap.classList.add('visible');
-      } else {
-        wrap.classList.remove('visible');
+      if (!item || item.rawWeight === null) {
         if (runMode === 'raw') setMode('processed');
       }
+      updateFillToggle();
       tryAutoFillUnits();
     }
 
-    function onVehicleChange() { tryAutoFillUnits(); }
+    function onVehicleChange() {
+      updateFillToggle();
+      tryAutoFillUnits();
+    }
+
+    function updateFillToggle() {
+      const item = getSelectedItem();
+      const vehicle = getSelectedVehicle();
+      const show = item && item.rawWeight !== null && vehicle && vehicle.capacity !== null;
+      document.getElementById('fillToggleWrap').classList.toggle('visible', show);
+    }
+
+    function setComp(type) {
+      compType = type;
+      document.getElementById('btnCompP2P').classList.toggle('active', type === 'p2p');
+      document.getElementById('btnCompSrvProc').classList.toggle('active', type === 'server-proc');
+      document.getElementById('btnCompSrvRaw').classList.toggle('active', type === 'server-raw');
+    }
+
+    function quickFill(mode) {
+      setMode(mode);
+      calculate();
+    }
 
     function tryAutoFillUnits() {
       const vehicle = getSelectedVehicle();
@@ -781,6 +891,7 @@
 
       const totalValue   = Math.round(units * item.sellPrice * tier.mult);
       const pricePerUnit = Math.round(item.sellPrice * tier.mult);
+      const compValue    = Math.round(totalValue * compMults[compType]);
       const procWeight   = item.weight;
       const rawWeight    = item.rawWeight;
       const displayWeight = isRaw ? rawWeight * units : procWeight * units;
@@ -899,6 +1010,17 @@
         fullBox.style.display = 'none';
       }
 
+      // Comp box
+      const compBox = document.getElementById('compBox');
+      if (compType !== 'p2p') {
+        document.getElementById('compBoxLabel').textContent =
+          compType === 'server-proc' ? 'Server Comp — Processed Goods (70%)' : 'Server Comp — Unprocessed Goods (33%)';
+        document.getElementById('compBoxValue').textContent = '£' + fmt(compValue);
+        compBox.classList.add('visible');
+      } else {
+        compBox.classList.remove('visible');
+      }
+
       document.getElementById('resultCard').classList.add('visible');
     }
 
@@ -907,9 +1029,11 @@
       document.getElementById('unitsInput').value    = '';
       document.getElementById('vehicleSelect').value = '';
       document.getElementById('capBadge').classList.remove('visible');
-      document.getElementById('modeToggleWrap').classList.remove('visible');
+      document.getElementById('fillToggleWrap').classList.remove('visible');
       selectTier(0);
       if (runMode !== 'processed') setMode('processed');
+      setComp('p2p');
+      document.getElementById('compBox').classList.remove('visible');
       document.getElementById('resultCard').classList.remove('visible');
     }
 
