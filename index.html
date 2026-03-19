@@ -116,10 +116,8 @@
     }
     .cap-badge.visible { display: block; }
 
-    /* ── Mode toggle ── */
-    .mode-toggle-wrap {
-      display: none; /* shown by JS when item has rawWeight */
-    }
+    /* Mode toggle */
+    .mode-toggle-wrap { display: none; }
     .mode-toggle-wrap.visible { display: block; }
     .mode-toggle {
       display: flex;
@@ -146,27 +144,12 @@
     }
     .mode-btn:hover { color: #fff; }
     .mode-btn.active { background: #f26419; color: #ffffff; }
-    .mode-btn .mode-sub {
-      display: block;
-      font-size: 0.65rem;
-      font-weight: 400;
-      opacity: 0.8;
-      margin-top: 1px;
-    }
-    .mode-hint {
-      font-size: 0.75rem;
-      color: #9aa0b8;
-      margin-top: 8px;
-      font-style: italic;
-    }
+    .mode-btn .mode-sub { display: block; font-size: 0.65rem; font-weight: 400; opacity: 0.8; margin-top: 1px; }
+    .mode-hint { font-size: 0.75rem; color: #9aa0b8; margin-top: 8px; font-style: italic; }
     .mode-hint.raw { color: #f2a019; }
 
     /* Tier buttons */
-    .tier-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
-    }
+    .tier-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
     .tier-btn {
       background: #1a1d2e;
       border: 1px solid #3a3f58;
@@ -204,7 +187,7 @@
     .btn-secondary { background: #2e3347; color: #9aa0b8; }
     .btn-secondary:hover { background: #363c55; color: #ffffff; }
 
-    /* ── Result panel ── */
+    /* Result panel */
     .result-card {
       background: #242838;
       border-radius: 12px;
@@ -223,26 +206,31 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #9aa0b8;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .result-item-name {
       font-size: 1.1rem;
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
-    .result-mode-tag {
+
+    /* Source + mode tags row */
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tag {
       display: inline-block;
       font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.07em;
       text-transform: uppercase;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 20px;
-      margin-bottom: 14px;
     }
-    .result-mode-tag.processed { background: #2e3347; color: #9aa0b8; }
-    .result-mode-tag.raw { background: rgba(242,100,25,0.18); color: #f26419; border: 1px solid #f26419; }
+    .tag-heist    { background: rgba(255,200,50,0.12); color: #f5c842; border: 1px solid #f5c842; }
+    .tag-process  { background: rgba(242,100,25,0.12); color: #f26419; border: 1px solid #f26419; }
+    .tag-other    { background: rgba(74,195,140,0.12); color: #4ac38c; border: 1px solid #4ac38c; }
+    .tag-mode-raw { background: rgba(242,100,25,0.18); color: #f26419; border: 1px solid #f26419; }
+    .tag-mode-proc{ background: #2e3347; color: #9aa0b8; }
 
     .result-row {
       display: flex;
@@ -256,9 +244,7 @@
     .result-row.no-border { border-bottom: none; }
     .result-row .val { font-weight: 600; color: #ffffff; }
     .result-row .val.orange { color: #f26419; }
-    .result-row .val.muted { color: #9aa0b8; }
 
-    /* raw weight rows — toggled by JS */
     .raw-only { display: none; }
     .raw-only.visible { display: flex; }
     .processed-only { display: flex; }
@@ -283,7 +269,6 @@
       margin-bottom: 12px;
     }
 
-    /* Capacity bar */
     .cap-bar-wrap { margin-top: 10px; }
     .cap-bar-header {
       display: flex;
@@ -293,14 +278,9 @@
       color: #9aa0b8;
       margin-bottom: 5px;
     }
-    .cap-bar-header .bar-label-right { font-weight: 600; color: #ffffff; }
-    .cap-bar-header .bar-label-right.warn { color: #e0403a; }
-    .cap-bar-track {
-      height: 7px;
-      background: #2e3347;
-      border-radius: 99px;
-      overflow: hidden;
-    }
+    .cap-bar-header .bar-right { font-weight: 600; color: #ffffff; }
+    .cap-bar-header .bar-right.warn { color: #e0403a; }
+    .cap-bar-track { height: 7px; background: #2e3347; border-radius: 99px; overflow: hidden; }
     .cap-bar-fill {
       height: 100%;
       background: #f26419;
@@ -310,16 +290,12 @@
     .cap-bar-fill.full { background: #4caf7d; }
     .cap-bar-fill.over { background: #e0403a; }
 
-    /* dual bars for raw mode */
     .dual-bars { display: none; }
     .dual-bars.visible { display: block; }
     .single-bar { display: block; }
     .single-bar.hidden { display: none; }
-
-    .bar-group { margin-top: 10px; }
     .bar-group + .bar-group { margin-top: 12px; }
 
-    /* Full vehicle value sub-box */
     .full-vehicle-box {
       margin-top: 12px;
       background: #1e2235;
@@ -333,7 +309,6 @@
     .full-vehicle-box .fv-label { font-size: 0.8rem; color: #9aa0b8; }
     .full-vehicle-box .fv-value { font-size: 1.1rem; font-weight: 700; color: #f26419; }
 
-    /* Total box */
     .total-box {
       margin-top: 20px;
       background: #1a1d2e;
@@ -404,7 +379,6 @@
       </select>
     </div>
 
-    <!-- Mode toggle — only shown when item has a raw form -->
     <div class="field mode-toggle-wrap" id="modeToggleWrap">
       <label>Run Mode</label>
       <div class="mode-toggle">
@@ -432,19 +406,19 @@
     </div>
   </div>
 
-  <!-- ── RESULT ── -->
+  <!-- RESULT -->
   <div class="result-card" id="resultCard">
     <div class="result-title">Run Summary</div>
     <div class="result-item-name" id="resItemName"></div>
-    <div class="result-mode-tag" id="resModeTag"></div>
+    <div class="tag-row">
+      <span class="tag" id="resSourceTag"></span>
+      <span class="tag" id="resModeTag"></span>
+    </div>
 
-    <!-- Processed-only row -->
     <div class="result-row processed-only" id="rowWeightUnit">
       <span>Weight per unit</span>
       <span class="val" id="resWeightUnit"></span>
     </div>
-
-    <!-- Raw-only rows -->
     <div class="result-row raw-only" id="rowRawWeight">
       <span>Raw weight per unit <span style="font-size:0.8em;color:#9aa0b8">(gathering)</span></span>
       <span class="val orange" id="resRawWeightUnit"></span>
@@ -471,7 +445,6 @@
       <span class="val" id="resPricePerUnit"></span>
     </div>
 
-    <!-- Vehicle breakdown -->
     <div class="vehicle-section" id="vehicleSection">
       <div class="vehicle-section-title">Vehicle Capacity</div>
 
@@ -488,12 +461,11 @@
         <span class="val orange" id="resMaxUnits"></span>
       </div>
 
-      <!-- Single bar (processed mode) -->
       <div class="single-bar" id="singleBar">
         <div class="cap-bar-wrap bar-group">
           <div class="cap-bar-header">
             <span>Weight used</span>
-            <span class="bar-label-right" id="resBarLabel">—</span>
+            <span class="bar-right" id="resBarLabel">—</span>
           </div>
           <div class="cap-bar-track">
             <div class="cap-bar-fill" id="capBarFill" style="width:0%"></div>
@@ -501,12 +473,11 @@
         </div>
       </div>
 
-      <!-- Dual bars (raw gather mode) -->
       <div class="dual-bars" id="dualBars">
         <div class="cap-bar-wrap bar-group">
           <div class="cap-bar-header">
-            <span>Gathering <span style="color:#f26419">(raw weight, vehicle full)</span></span>
-            <span class="bar-label-right" id="resRawBarLabel">—</span>
+            <span>Gathering <span style="color:#f26419">(raw — vehicle full)</span></span>
+            <span class="bar-right" id="resRawBarLabel">—</span>
           </div>
           <div class="cap-bar-track">
             <div class="cap-bar-fill full" id="rawBarFill" style="width:100%"></div>
@@ -514,8 +485,8 @@
         </div>
         <div class="cap-bar-wrap bar-group">
           <div class="cap-bar-header">
-            <span>After processing <span style="color:#9aa0b8">(lighter — vehicle not full)</span></span>
-            <span class="bar-label-right" id="resProcBarLabel">—</span>
+            <span>After processing <span style="color:#9aa0b8">(lighter — not full)</span></span>
+            <span class="bar-right" id="resProcBarLabel">—</span>
           </div>
           <div class="cap-bar-track">
             <div class="cap-bar-fill" id="procBarFill" style="width:0%"></div>
@@ -532,52 +503,58 @@
     <div class="total-box">
       <div class="total-label">Total Run Value</div>
       <div class="total-value" id="resTotalValue"></div>
-      <div class="total-currency">GTA Dollars</div>
+      <div class="total-currency">British Pounds</div>
     </div>
   </div>
 
   <script>
-    /* ── DATA ── */
-    // rawWeight: unprocessed weight per unit (Grade 01 items are +1 heavier before processing)
-    // rawWeight: null = no processable raw form
+    /* ── DATA ──
+       source: 'heist'      — stolen from vault, loaded to trucks, sold directly
+               'processable'— gathered raw, processed, sold
+               'other'      — fish, produce, static price, no processing
+       rawWeight: unprocessed weight (processable items only, +1 vs processed weight)
+    */
     const items = [
-      { name: "Antique",                        weight: 25.0, rawWeight: null,  sellPrice: 144510 },
-      { name: "Apple",                           weight: 1.0,  rawWeight: null,  sellPrice: 10 },
-      { name: "Bond",                            weight: 15.0, rawWeight: null,  sellPrice: 90319 },
-      { name: "Cat Shark",                       weight: 6.0,  rawWeight: null,  sellPrice: 425 },
-      { name: "Cocaine [Grade 01]",              weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Codeine [Grade 01]",              weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Copper [Grade 01]",               weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Corn [Grade 01]",                 weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Cotton [Grade 01]",               weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Ecstasy [Grade 01]",              weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Gemstone",                        weight: 10.0, rawWeight: null,  sellPrice: 45159 },
-      { name: "Gold Bullion",                    weight: 14.0, rawWeight: null,  sellPrice: 4053 },
-      { name: "Heroin [Grade 01]",               weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Iron [Grade 01]",                 weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Ketamine [Grade 01]",             weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Lead [Grade 01]",                 weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Ledger Nano X",                   weight: 10.0, rawWeight: null,  sellPrice: 45159 },
-      { name: "LSD [Grade 01]",                  weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Mackerel",                        weight: 4.0,  rawWeight: null,  sellPrice: 160 },
-      { name: "Marijuana [Grade 01]",            weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Mounjaro Pen",                    weight: 5.0,  rawWeight: null,  sellPrice: 22579 },
-      { name: "Mullet",                          weight: 4.0,  rawWeight: null,  sellPrice: 300 },
-      { name: "Nike Air Yeezy 2 Red October",    weight: 5.0,  rawWeight: null,  sellPrice: 35124 },
-      { name: "Ornate",                          weight: 2.0,  rawWeight: null,  sellPrice: 80 },
-      { name: "Peach",                           weight: 1.0,  rawWeight: null,  sellPrice: 10 },
-      { name: "RPUK Mission File",               weight: 7.5,  rawWeight: null,  sellPrice: 42650 },
-      { name: "Salema",                          weight: 2.0,  rawWeight: null,  sellPrice: 80 },
-      { name: "Seized Contraband",               weight: 40.0, rawWeight: null,  sellPrice: 220000 },
-      { name: "Silver Bullion",                  weight: 10.0, rawWeight: null,  sellPrice: 3051 },
-      { name: "Speed [Grade 01]",                weight: 3.0,  rawWeight: 4.0,   sellPrice: 1052 },
-      { name: "Stamp Collection",                weight: 5.0,  rawWeight: null,  sellPrice: 28099 },
-      { name: "Sugar [Grade 01]",                weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Tin [Grade 01]",                  weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Tobacco [Grade 01]",              weight: 3.0,  rawWeight: 4.0,   sellPrice: 701 },
-      { name: "Tuna",                            weight: 6.0,  rawWeight: null,  sellPrice: 625 },
-      { name: "Turtle",                          weight: 6.0,  rawWeight: null,  sellPrice: 2000 },
-      { name: "Watermelon",                      weight: 1.0,  rawWeight: null,  sellPrice: 10 },
+      // ── Heist & Major Events ──
+      { name: "Antique",                       weight: 25.0, rawWeight: null, sellPrice: 144510, source: 'heist' },
+      { name: "Bond",                          weight: 15.0, rawWeight: null, sellPrice: 90319,  source: 'heist' },
+      { name: "Gemstone",                      weight: 10.0, rawWeight: null, sellPrice: 45159,  source: 'heist' },
+      { name: "Gold Bullion",                  weight: 14.0, rawWeight: null, sellPrice: 4053,   source: 'heist' },
+      { name: "Ledger Nano X",                 weight: 10.0, rawWeight: null, sellPrice: 45159,  source: 'heist' },
+      { name: "Mounjaro Pen",                  weight: 5.0,  rawWeight: null, sellPrice: 22579,  source: 'heist' },
+      { name: "Nike Air Yeezy 2 Red October",  weight: 5.0,  rawWeight: null, sellPrice: 35124,  source: 'heist' },
+      { name: "RPUK Mission File",             weight: 7.5,  rawWeight: null, sellPrice: 42650,  source: 'heist' },
+      { name: "Seized Contraband",             weight: 40.0, rawWeight: null, sellPrice: 220000, source: 'heist' },
+      { name: "Silver Bullion",                weight: 10.0, rawWeight: null, sellPrice: 3051,   source: 'heist' },
+      { name: "Stamp Collection",              weight: 5.0,  rawWeight: null, sellPrice: 28099,  source: 'heist' },
+      // ── Processable Goods [Grade 01] ──
+      { name: "Cocaine [Grade 01]",            weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Codeine [Grade 01]",            weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Copper [Grade 01]",             weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "Corn [Grade 01]",               weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "Cotton [Grade 01]",             weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "Ecstasy [Grade 01]",            weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Heroin [Grade 01]",             weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Iron [Grade 01]",               weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "Ketamine [Grade 01]",           weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Lead [Grade 01]",               weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "LSD [Grade 01]",                weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Marijuana [Grade 01]",          weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Speed [Grade 01]",              weight: 3.0,  rawWeight: 4.0,  sellPrice: 1052,   source: 'processable' },
+      { name: "Sugar [Grade 01]",              weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "Tin [Grade 01]",                weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      { name: "Tobacco [Grade 01]",            weight: 3.0,  rawWeight: 4.0,  sellPrice: 701,    source: 'processable' },
+      // ── Fish & Produce ──
+      { name: "Apple",                         weight: 1.0,  rawWeight: null, sellPrice: 10,     source: 'other' },
+      { name: "Cat Shark",                     weight: 6.0,  rawWeight: null, sellPrice: 425,    source: 'other' },
+      { name: "Mackerel",                      weight: 4.0,  rawWeight: null, sellPrice: 160,    source: 'other' },
+      { name: "Mullet",                        weight: 4.0,  rawWeight: null, sellPrice: 300,    source: 'other' },
+      { name: "Ornate",                        weight: 2.0,  rawWeight: null, sellPrice: 80,     source: 'other' },
+      { name: "Peach",                         weight: 1.0,  rawWeight: null, sellPrice: 10,     source: 'other' },
+      { name: "Salema",                        weight: 2.0,  rawWeight: null, sellPrice: 80,     source: 'other' },
+      { name: "Tuna",                          weight: 6.0,  rawWeight: null, sellPrice: 625,    source: 'other' },
+      { name: "Turtle",                        weight: 6.0,  rawWeight: null, sellPrice: 2000,   source: 'other' },
+      { name: "Watermelon",                    weight: 1.0,  rawWeight: null, sellPrice: 10,     source: 'other' },
     ];
 
     const tiers = [
@@ -635,20 +612,40 @@
       ]},
     ];
 
+    const sourceGroups = [
+      { label: 'Heist & Major Events',    source: 'heist' },
+      { label: 'Processable Goods',       source: 'processable' },
+      { label: 'Fish & Produce',          source: 'other' },
+    ];
+
+    const sourceMeta = {
+      heist:       { tagClass: 'tag-heist',   tagText: 'Heist / Major Event' },
+      processable: { tagClass: 'tag-process', tagText: 'Processable Good' },
+      other:       { tagClass: 'tag-other',   tagText: 'Fish & Produce' },
+    };
+
     /* ── STATE ── */
     let selectedTier = 0;
-    let runMode = 'processed'; // 'processed' | 'raw'
+    let runMode = 'processed';
 
     /* ── BUILD UI ── */
 
+    // Item dropdown — grouped by source
     const itemSel = document.getElementById('itemSelect');
-    items.forEach((item, i) => {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = item.name;
-      itemSel.appendChild(opt);
+    sourceGroups.forEach(sg => {
+      const grp = document.createElement('optgroup');
+      grp.label = sg.label;
+      items.forEach((item, i) => {
+        if (item.source !== sg.source) return;
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = item.name;
+        grp.appendChild(opt);
+      });
+      itemSel.appendChild(grp);
     });
 
+    // Vehicle dropdown
     const vehSel = document.getElementById('vehicleSelect');
     vehicleGroups.forEach(g => {
       const grp = document.createElement('optgroup');
@@ -663,6 +660,7 @@
       vehSel.appendChild(grp);
     });
 
+    // Tier buttons
     const tierGrid = document.getElementById('tierGrid');
     tiers.forEach((t, i) => {
       const btn = document.createElement('button');
@@ -711,15 +709,12 @@
         wrap.classList.add('visible');
       } else {
         wrap.classList.remove('visible');
-        // Force back to processed if item has no raw form
         if (runMode === 'raw') setMode('processed');
       }
       tryAutoFillUnits();
     }
 
-    function onVehicleChange() {
-      tryAutoFillUnits();
-    }
+    function onVehicleChange() { tryAutoFillUnits(); }
 
     function tryAutoFillUnits() {
       const vehicle = getSelectedVehicle();
@@ -728,10 +723,8 @@
       const input = document.getElementById('unitsInput');
 
       if (vehicle && vehicle.capacity !== null && item) {
-        // Use raw weight for auto-fill in raw mode, processed weight otherwise
         const unitWeight = (runMode === 'raw' && item.rawWeight !== null) ? item.rawWeight : item.weight;
-        const maxUnits = Math.floor(vehicle.capacity / unitWeight);
-        input.value = maxUnits;
+        input.value = Math.floor(vehicle.capacity / unitWeight);
         badge.classList.add('visible');
       } else {
         badge.classList.remove('visible');
@@ -744,7 +737,7 @@
 
     function calculate() {
       const itemIdx = document.getElementById('itemSelect').value;
-      const units = parseFloat(document.getElementById('unitsInput').value);
+      const units   = parseFloat(document.getElementById('unitsInput').value);
       const vehicle = getSelectedVehicle();
 
       if (itemIdx === '' || isNaN(units) || units < 1) {
@@ -756,102 +749,98 @@
       const tier = tiers[selectedTier];
       const isRaw = runMode === 'raw' && item.rawWeight !== null;
 
-      const totalValue = Math.round(units * item.sellPrice * tier.mult);
+      const totalValue   = Math.round(units * item.sellPrice * tier.mult);
       const pricePerUnit = Math.round(item.sellPrice * tier.mult);
+      const procWeight   = item.weight;
+      const rawWeight    = item.rawWeight;
+      const displayWeight = isRaw ? rawWeight * units : procWeight * units;
 
-      // Weight context
-      const procWeight = item.weight;
-      const rawWeight = item.rawWeight;
-      // In raw mode: units were gathered at rawWeight, then processed to procWeight (same count)
-      const displayWeight = isRaw ? (rawWeight * units) : (procWeight * units);
-
-      // ── Header ──
+      // Header & tags
       document.getElementById('resItemName').textContent = item.name;
+
+      const meta = sourceMeta[item.source];
+      const srcTag = document.getElementById('resSourceTag');
+      srcTag.textContent  = meta.tagText;
+      srcTag.className    = 'tag ' + meta.tagClass;
+
       const modeTag = document.getElementById('resModeTag');
       if (isRaw) {
-        modeTag.textContent = 'Raw Gather Run';
-        modeTag.className = 'result-mode-tag raw';
+        modeTag.textContent = 'Raw Gather';
+        modeTag.className   = 'tag tag-mode-raw';
+      } else if (item.source === 'heist') {
+        modeTag.textContent = 'Direct Sell';
+        modeTag.className   = 'tag tag-mode-proc';
       } else {
-        modeTag.textContent = 'Processed / Sell Run';
-        modeTag.className = 'result-mode-tag processed';
+        modeTag.textContent = 'Processed / Sell';
+        modeTag.className   = 'tag tag-mode-proc';
       }
 
-      // ── Weight rows ──
-      // Toggle which rows are visible
+      // Weight rows
       document.getElementById('rowWeightUnit').classList.toggle('hidden', isRaw);
       document.getElementById('rowRawWeight').classList.toggle('visible', isRaw);
       document.getElementById('rowProcWeight').classList.toggle('visible', isRaw);
 
-      document.getElementById('resWeightUnit').textContent = procWeight + ' kg';
-      document.getElementById('resRawWeightUnit').textContent = rawWeight + ' kg';
+      document.getElementById('resWeightUnit').textContent     = procWeight + ' kg';
+      document.getElementById('resRawWeightUnit').textContent  = rawWeight  + ' kg';
       document.getElementById('resProcWeightUnit').textContent = procWeight + ' kg';
+      document.getElementById('resWeightTotal').textContent    = fmt(displayWeight) + ' kg';
 
-      // Total weight shown = raw if raw mode (what was in the vehicle during gather), else processed
-      document.getElementById('resWeightTotal').textContent = fmt(displayWeight) + ' kg';
+      document.getElementById('resBasePrice').textContent    = '£' + fmt(item.sellPrice);
+      document.getElementById('resTierMult').textContent     = tier.mult + 'x  (Tier ' + tier.label + ')';
+      document.getElementById('resPricePerUnit').textContent = '£' + fmt(pricePerUnit);
+      document.getElementById('resTotalValue').textContent   = '£' + fmt(totalValue);
 
-      document.getElementById('resBasePrice').textContent = '$' + fmt(item.sellPrice);
-      document.getElementById('resTierMult').textContent = tier.mult + 'x  (Tier ' + tier.label + ')';
-      document.getElementById('resPricePerUnit').textContent = '$' + fmt(pricePerUnit);
-      document.getElementById('resTotalValue').textContent = '$' + fmt(totalValue);
-
-      // ── Vehicle section ──
-      const vSec = document.getElementById('vehicleSection');
-      const fullBox = document.getElementById('fullVehicleBox');
+      // Vehicle section
+      const vSec     = document.getElementById('vehicleSection');
+      const fullBox  = document.getElementById('fullVehicleBox');
       const singleBar = document.getElementById('singleBar');
-      const dualBars = document.getElementById('dualBars');
+      const dualBars  = document.getElementById('dualBars');
 
       if (vehicle) {
         const cap = vehicle.capacity;
         vSec.classList.add('visible');
 
         document.getElementById('resVehicleName').textContent = vehicle.name + '  (' + vehicle.group + ')';
-        document.getElementById('resVehicleCap').textContent = cap !== null ? fmt(cap) + ' kg' : 'No virtual inventory';
+        document.getElementById('resVehicleCap').textContent  = cap !== null ? fmt(cap) + ' kg' : 'No virtual inventory';
 
         if (cap !== null) {
           if (isRaw) {
-            // Raw mode: max units based on raw weight
-            const maxUnitsRaw = Math.floor(cap / rawWeight);
-            document.getElementById('resMaxUnitsLabel').textContent = 'Max units gathered (raw)';
-            document.getElementById('resMaxUnits').textContent = fmt(maxUnitsRaw) + ' units';
-
-            // Raw bar: always 100% (we filled it)
+            const maxUnitsRaw   = Math.floor(cap / rawWeight);
             const rawLoadWeight = maxUnitsRaw * rawWeight;
-            document.getElementById('resRawBarLabel').textContent = fmt(rawLoadWeight) + ' / ' + fmt(cap) + ' kg';
-            document.getElementById('rawBarFill').style.width = Math.min((rawLoadWeight / cap) * 100, 100) + '%';
-
-            // Processed bar: same units but lighter
             const procLoadWeight = maxUnitsRaw * procWeight;
-            const procPct = Math.min((procLoadWeight / cap) * 100, 100);
+
+            document.getElementById('resMaxUnitsLabel').textContent = 'Max units gathered (raw)';
+            document.getElementById('resMaxUnits').textContent      = fmt(maxUnitsRaw) + ' units';
+
+            document.getElementById('resRawBarLabel').textContent  = fmt(rawLoadWeight)  + ' / ' + fmt(cap) + ' kg';
             document.getElementById('resProcBarLabel').textContent = fmt(procLoadWeight) + ' / ' + fmt(cap) + ' kg';
-            document.getElementById('procBarFill').style.width = procPct + '%';
+            document.getElementById('rawBarFill').style.width  = Math.min((rawLoadWeight  / cap) * 100, 100) + '%';
+            document.getElementById('procBarFill').style.width = Math.min((procLoadWeight / cap) * 100, 100) + '%';
 
             singleBar.classList.add('hidden');
             dualBars.classList.add('visible');
 
-            // Full vehicle value (raw gather count)
             if (units < maxUnitsRaw) {
               const fullValue = Math.round(maxUnitsRaw * item.sellPrice * tier.mult);
-              document.getElementById('fullVehicleLabel').textContent = 'Full vehicle value (raw gather)';
-              document.getElementById('resFullVehicleValue').textContent = '$' + fmt(fullValue);
+              document.getElementById('fullVehicleLabel').textContent    = 'Full vehicle value (raw gather)';
+              document.getElementById('resFullVehicleValue').textContent = '£' + fmt(fullValue);
               fullBox.style.display = 'flex';
             } else {
               fullBox.style.display = 'none';
             }
 
           } else {
-            // Processed mode: standard
             const maxUnits = Math.floor(cap / procWeight);
+            const totalW   = units * procWeight;
+            const over     = totalW > cap;
+
             document.getElementById('resMaxUnitsLabel').textContent = 'Max units (full load)';
-            document.getElementById('resMaxUnits').textContent = fmt(maxUnits) + ' units';
-
-            const totalW = units * procWeight;
-            const pct = Math.min((totalW / cap) * 100, 100);
-            const over = totalW > cap;
-
-            document.getElementById('resBarLabel').textContent =
+            document.getElementById('resMaxUnits').textContent      = fmt(maxUnits) + ' units';
+            document.getElementById('resBarLabel').textContent      =
               fmt(totalW) + ' / ' + fmt(cap) + ' kg' + (over ? '  ⚠ OVER' : '');
+
             const fill = document.getElementById('capBarFill');
-            fill.style.width = pct + '%';
+            fill.style.width = Math.min((totalW / cap) * 100, 100) + '%';
             fill.classList.toggle('over', over);
 
             singleBar.classList.remove('hidden');
@@ -859,8 +848,8 @@
 
             if (units < maxUnits) {
               const fullValue = Math.round(maxUnits * item.sellPrice * tier.mult);
-              document.getElementById('fullVehicleLabel').textContent = 'Full vehicle value';
-              document.getElementById('resFullVehicleValue').textContent = '$' + fmt(fullValue);
+              document.getElementById('fullVehicleLabel').textContent    = 'Full vehicle value';
+              document.getElementById('resFullVehicleValue').textContent = '£' + fmt(fullValue);
               fullBox.style.display = 'flex';
             } else {
               fullBox.style.display = 'none';
@@ -868,9 +857,9 @@
           }
         } else {
           document.getElementById('resMaxUnitsLabel').textContent = 'Max units';
-          document.getElementById('resMaxUnits').textContent = '—';
-          document.getElementById('resBarLabel').textContent = '—';
-          document.getElementById('capBarFill').style.width = '0%';
+          document.getElementById('resMaxUnits').textContent      = '—';
+          document.getElementById('resBarLabel').textContent      = '—';
+          document.getElementById('capBarFill').style.width       = '0%';
           singleBar.classList.remove('hidden');
           dualBars.classList.remove('visible');
           fullBox.style.display = 'none';
@@ -883,10 +872,9 @@
       document.getElementById('resultCard').classList.add('visible');
     }
 
-    /* ── RESET ── */
     function resetAll() {
-      document.getElementById('itemSelect').value = '';
-      document.getElementById('unitsInput').value = '';
+      document.getElementById('itemSelect').value    = '';
+      document.getElementById('unitsInput').value    = '';
       document.getElementById('vehicleSelect').value = '';
       document.getElementById('capBadge').classList.remove('visible');
       document.getElementById('modeToggleWrap').classList.remove('visible');
