@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA Run Calculator — Staff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1d2e;
+      color: #ffffff;
+      font-family: 'Barlow', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 36px;
+      width: 100%;
+      max-width: 640px;
+    }
+    header img { width: 52px; height: 52px; border-radius: 8px; }
+    header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: 0.02em; color: #ffffff; }
+    header h1 span { color: #f26419; }
+
+    .nav-link {
+      margin-left: auto;
+      color: #9aa0b8;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #f26419; }
+
+    .section-divider {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f26419;
+      margin: 22px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-divider::after { content: ''; flex: 1; height: 1px; background: #2e3347; }
+
+    .card {
+      background: #242838;
+      border-radius: 12px;
+      padding: 28px 32px;
+      width: 100%;
+      max-width: 640px;
+      border: 1px solid #2e3347;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 8px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    select:focus, input[type="number"]:focus { border-color: #f26419; }
+    select option, select optgroup { background: #242838; }
+    select optgroup { color: #f26419; font-size: 0.8rem; font-style: normal; }
+
+    .step-btn {
+      flex-shrink: 0;
+      width: 38px;
+      height: 42px;
+      background: #2e3347;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #9aa0b8;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+      padding: 0;
+      font-family: inherit;
+    }
+    .step-btn:hover { background: #3a3f58; color: #ffffff; border-color: #f26419; }
+    .step-btn:active { transform: scale(0.94); }
+
+    /* Comp type toggle */
+    .comp-toggle {
+      display: flex;
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 9px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .comp-btn {
+      flex: 1;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 6px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: transparent;
+      color: #9aa0b8;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .comp-btn:hover { color: #fff; }
+    .comp-btn.active { background: #f26419; color: #ffffff; }
+    .comp-btn .comp-sub { display: block; font-size: 0.62rem; font-weight: 400; opacity: 0.85; margin-top: 1px; }
+
+    /* Tier buttons */
+    .tier-btn {
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #9aa0b8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 10px 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .tier-btn:hover { border-color: #f26419; color: #f26419; }
+    .tier-btn.active { background: #f26419; border-color: #f26419; color: #ffffff; }
+    .tier-btn .tier-num { display: block; font-size: 1rem; }
+    .tier-btn .tier-mult { display: block; font-size: 0.7rem; opacity: 0.85; }
+
+    .actions { display: flex; gap: 12px; margin-top: 24px; }
+    .btn {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 13px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: #f26419; color: #ffffff; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: #2e3347; color: #9aa0b8; }
+    .btn-secondary:hover { background: #363c55; color: #ffffff; }
+
+    /* Item rows */
+    .item-row {
+      background: #1a1d2e;
+      border: 1px solid #2e3347;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .item-row-top {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .item-row-top select { flex: 1; min-width: 0; }
+    .units-stepper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .units-stepper input[type="number"] {
+      width: 70px;
+      flex-shrink: 0;
+    }
+    .remove-btn {
+      flex-shrink: 0;
+      width: 38px;
+      height: 42px;
+      background: #2e3347;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #9aa0b8;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+      padding: 0;
+      font-family: inherit;
+    }
+    .remove-btn:hover { background: #3a2020; color: #e0403a; border-color: #e0403a; }
+    .remove-btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+    .remove-btn:active { transform: scale(0.94); }
+
+    .item-row-tiers {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .tier-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tier-grid-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+      flex: 1;
+    }
+
+    .add-row-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px dashed #3a3f58;
+      border-radius: 8px;
+      color: #9aa0b8;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 4px;
+    }
+    .add-row-btn:hover { border-color: #f26419; color: #f26419; }
+
+    /* Result panel */
+    .result-card {
+      background: #242838;
+      border-radius: 12px;
+      padding: 24px 32px;
+      width: 100%;
+      max-width: 640px;
+      border: 1px solid #2e3347;
+      margin-top: 16px;
+      display: none;
+    }
+    .result-card.visible { display: block; }
+
+    .result-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 16px;
+    }
+
+    .result-item-block + .result-item-block {
+      border-top: 1px solid #2e3347;
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .result-item-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .result-item-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .tier-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: rgba(242,100,25,0.15);
+      color: #f26419;
+      border: 1px solid rgba(242,100,25,0.4);
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid #2e3347;
+      font-size: 0.9rem;
+      color: #cccccc;
+    }
+    .result-row.no-border { border-bottom: none; }
+    .result-row .val { font-weight: 600; color: #ffffff; }
+    .result-row .val.orange { color: #f26419; }
+
+    .total-box {
+      margin-top: 20px;
+      background: #1a1d2e;
+      border: 1px solid #f26419;
+      border-radius: 10px;
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .total-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 6px;
+    }
+    .total-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #f26419;
+      text-shadow: 0 0 20px rgba(242,100,25,0.5), 0 0 40px rgba(242,100,25,0.25);
+      letter-spacing: 0.01em;
+    }
+    .total-currency { font-size: 1rem; font-weight: 500; color: #9aa0b8; margin-top: 2px; }
+
+    .comp-box {
+      margin-top: 10px;
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 10px;
+      padding: 14px 20px;
+      text-align: center;
+      display: none;
+    }
+    .comp-box.visible { display: block; }
+    .comp-box-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 4px;
+    }
+    .comp-box-value { font-size: 1.7rem; font-weight: 700; color: #4ac38c; }
+    .comp-box-currency { font-size: 0.85rem; color: #9aa0b8; margin-top: 2px; }
+
+    @media (max-width: 480px) {
+      .card, .result-card { padding: 20px 18px; }
+      header h1 { font-size: 1.4rem; }
+      .total-value { font-size: 1.8rem; }
+      .item-row-top { flex-wrap: wrap; }
+      .item-row-top select { width: 100%; flex-basis: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="GTA Logo">
+    <h1>GTA <span>Run</span> Calculator — Staff</h1>
+    <a href="index.html" class="nav-link">Run Calculator →</a>
+  </header>
+
+  <div class="card">
+
+    <div class="section-divider">Items</div>
+
+    <div id="rowsContainer"></div>
+
+    <button class="add-row-btn" onclick="addRow()" type="button">+ Add Item</button>
+
+    <div class="section-divider">Comp Type <span style="font-weight:400;color:#9aa0b8;font-size:0.65rem;letter-spacing:0">(staff / tickets)</span></div>
+
+    <div class="comp-toggle">
+      <button class="comp-btn active" id="btnCompP2P" onclick="setComp('p2p')">
+        Player → Player
+        <span class="comp-sub">100% — no modifier</span>
+      </button>
+      <button class="comp-btn" id="btnCompSrvProc" onclick="setComp('server-proc')">
+        Server (Processed)
+        <span class="comp-sub">70% of value</span>
+      </button>
+      <button class="comp-btn" id="btnCompSrvRaw" onclick="setComp('server-raw')">
+        Server (Unprocessed)
+        <span class="comp-sub">33% of value</span>
+      </button>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+      <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
+    </div>
+
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+    <div class="result-title">Comp Summary</div>
+    <div id="resultRows"></div>
+
+    <div class="total-box">
+      <div class="total-label">Grand Total</div>
+      <div class="total-value" id="resTotalValue"></div>
+      <div class="total-currency">British Pounds</div>
+    </div>
+
+    <div class="comp-box" id="compBox">
+      <div class="comp-box-label" id="compBoxLabel">Server Comp</div>
+      <div class="comp-box-value" id="compBoxValue"></div>
+      <div class="comp-box-currency">British Pounds</div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      // ── Heist & Major Events ──
+      { name: "Antique",                       sellPrice: 144510, source: 'heist' },
+      { name: "Bond",                          sellPrice: 90319,  source: 'heist' },
+      { name: "Gemstone",                      sellPrice: 45159,  source: 'heist' },
+      { name: "Gold Bullion",                  sellPrice: 4053,   source: 'heist' },
+      { name: "Ledger Nano X",                 sellPrice: 45159,  source: 'heist' },
+      { name: "Mounjaro Pen",                  sellPrice: 22579,  source: 'heist' },
+      { name: "Nike Air Yeezy 2 Red October",  sellPrice: 35124,  source: 'heist' },
+      { name: "RPUK Mission File",             sellPrice: 42650,  source: 'heist' },
+      { name: "Seized Contraband",             sellPrice: 220000, source: 'heist' },
+      { name: "Silver Bullion",                sellPrice: 3051,   source: 'heist' },
+      { name: "Stamp Collection",              sellPrice: 28099,  source: 'heist' },
+      // ── Processable Goods [Grade 01] ──
+      { name: "Cocaine [Grade 01]",            sellPrice: 1052,   source: 'processable' },
+      { name: "Codeine [Grade 01]",            sellPrice: 1052,   source: 'processable' },
+      { name: "Copper [Grade 01]",             sellPrice: 701,    source: 'processable' },
+      { name: "Corn [Grade 01]",               sellPrice: 701,    source: 'processable' },
+      { name: "Cotton [Grade 01]",             sellPrice: 701,    source: 'processable' },
+      { name: "Ecstasy [Grade 01]",            sellPrice: 1052,   source: 'processable' },
+      { name: "Heroin [Grade 01]",             sellPrice: 1052,   source: 'processable' },
+      { name: "Iron [Grade 01]",               sellPrice: 701,    source: 'processable' },
+      { name: "Ketamine [Grade 01]",           sellPrice: 1052,   source: 'processable' },
+      { name: "Lead [Grade 01]",               sellPrice: 701,    source: 'processable' },
+      { name: "LSD [Grade 01]",                sellPrice: 1052,   source: 'processable' },
+      { name: "Marijuana [Grade 01]",          sellPrice: 1052,   source: 'processable' },
+      { name: "Speed [Grade 01]",              sellPrice: 1052,   source: 'processable' },
+      { name: "Sugar [Grade 01]",              sellPrice: 701,    source: 'processable' },
+      { name: "Tin [Grade 01]",                sellPrice: 701,    source: 'processable' },
+      { name: "Tobacco [Grade 01]",            sellPrice: 701,    source: 'processable' },
+      // ── Fish & Produce ──
+      { name: "Apple",                         sellPrice: 10,     source: 'other' },
+      { name: "Cat Shark",                     sellPrice: 425,    source: 'other' },
+      { name: "Mackerel",                      sellPrice: 160,    source: 'other' },
+      { name: "Mullet",                        sellPrice: 300,    source: 'other' },
+      { name: "Ornate",                        sellPrice: 80,     source: 'other' },
+      { name: "Peach",                         sellPrice: 10,     source: 'other' },
+      { name: "Salema",                        sellPrice: 80,     source: 'other' },
+      { name: "Tuna",                          sellPrice: 625,    source: 'other' },
+      { name: "Turtle",                        sellPrice: 2000,   source: 'other' },
+      { name: "Watermelon",                    sellPrice: 10,     source: 'other' },
+    ];
+
+    const tiers = [
+      { label: "1", mult: 1 },
+      { label: "2", mult: 1.15 },
+      { label: "3", mult: 1.32 },
+      { label: "4", mult: 1.52 },
+      { label: "5", mult: 1.74 },
+      { label: "6", mult: 2 },
+    ];
+
+    const sourceGroups = [
+      { label: 'Heist & Major Events', source: 'heist' },
+      { label: 'Processable Goods',    source: 'processable' },
+      { label: 'Fish & Produce',       source: 'other' },
+    ];
+
+    const compMults = { 'p2p': 1.0, 'server-proc': 0.70, 'server-raw': 0.33 };
+
+    function fmt(n) { return n.toLocaleString('en-GB'); }
+
+    /* ── STATE ── */
+    let rowCounter = 0;
+    let compType = 'p2p';
+
+    /* ── ITEM OPTIONS TEMPLATE ── */
+    let itemOptionsTemplate = null;
+
+    function buildItemOptions() {
+      const frag = document.createDocumentFragment();
+      const blank = document.createElement('option');
+      blank.value = '';
+      blank.textContent = '— Select item —';
+      frag.appendChild(blank);
+      sourceGroups.forEach(sg => {
+        const grp = document.createElement('optgroup');
+        grp.label = sg.label;
+        items.forEach((item, i) => {
+          if (item.source !== sg.source) return;
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = item.name;
+          grp.appendChild(opt);
+        });
+        frag.appendChild(grp);
+      });
+      return frag;
+    }
+
+    /* ── ROW MANAGEMENT ── */
+
+    function addRow() {
+      const id = ++rowCounter;
+
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.dataset.id = id;
+      row.dataset.tier = '0';
+
+      // Top line: item select + units stepper + remove
+      const top = document.createElement('div');
+      top.className = 'item-row-top';
+
+      const sel = document.createElement('select');
+      sel.appendChild(buildItemOptions());
+      top.appendChild(sel);
+
+      const stepper = document.createElement('div');
+      stepper.className = 'units-stepper';
+
+      const minusBtn = document.createElement('button');
+      minusBtn.className = 'step-btn';
+      minusBtn.type = 'button';
+      minusBtn.textContent = '−';
+      minusBtn.onclick = () => stepRowUnits(id, -1);
+
+      const inp = document.createElement('input');
+      inp.type = 'number';
+      inp.className = 'units-inp';
+      inp.min = '1';
+      inp.placeholder = 'Qty';
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+
+      const plusBtn = document.createElement('button');
+      plusBtn.className = 'step-btn';
+      plusBtn.type = 'button';
+      plusBtn.textContent = '+';
+      plusBtn.onclick = () => stepRowUnits(id, 1);
+
+      stepper.appendChild(minusBtn);
+      stepper.appendChild(inp);
+      stepper.appendChild(plusBtn);
+      top.appendChild(stepper);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-btn';
+      removeBtn.type = 'button';
+      removeBtn.title = 'Remove row';
+      removeBtn.textContent = '×';
+      removeBtn.onclick = () => removeRow(id);
+      top.appendChild(removeBtn);
+
+      row.appendChild(top);
+
+      // Tier line
+      const tierLine = document.createElement('div');
+      tierLine.className = 'item-row-tiers';
+
+      const tierLbl = document.createElement('span');
+      tierLbl.className = 'tier-label';
+      tierLbl.textContent = 'Tier';
+      tierLine.appendChild(tierLbl);
+
+      const tierGrid = document.createElement('div');
+      tierGrid.className = 'tier-grid-row';
+      tierLine.appendChild(tierGrid);
+
+      row.appendChild(tierLine);
+
+      document.getElementById('rowsContainer').appendChild(row);
+      renderTierButtons(id, 0);
+      updateRemoveButtons();
+    }
+
+    function removeRow(id) {
+      const row = document.querySelector(`[data-id="${id}"]`);
+      if (row) row.remove();
+      updateRemoveButtons();
+    }
+
+    function updateRemoveButtons() {
+      const rows = document.querySelectorAll('.item-row');
+      rows.forEach(r => {
+        const btn = r.querySelector('.remove-btn');
+        if (btn) btn.disabled = rows.length <= 1;
+      });
+    }
+
+    function renderTierButtons(id, activeTierIdx) {
+      const row = document.querySelector(`[data-id="${id}"]`);
+      if (!row) return;
+      const grid = row.querySelector('.tier-grid-row');
+      grid.innerHTML = '';
+      tiers.forEach((t, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'tier-btn' + (i === activeTierIdx ? ' active' : '');
+        btn.type = 'button';
+        btn.innerHTML = `<span class="tier-num">T${t.label}</span><span class="tier-mult">${t.mult}×</span>`;
+        btn.onclick = () => selectRowTier(id, i);
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectRowTier(id, idx) {
+      const row = document.querySelector(`[data-id="${id}"]`);
+      if (!row) return;
+      row.dataset.tier = idx;
+      renderTierButtons(id, idx);
+    }
+
+    function stepRowUnits(id, delta) {
+      const row = document.querySelector(`[data-id="${id}"]`);
+      if (!row) return;
+      const inp = row.querySelector('.units-inp');
+      const current = parseFloat(inp.value) || 0;
+      inp.value = Math.max(1, current + delta);
+    }
+
+    /* ── COMP TYPE ── */
+
+    function setComp(type) {
+      compType = type;
+      document.getElementById('btnCompP2P').classList.toggle('active', type === 'p2p');
+      document.getElementById('btnCompSrvProc').classList.toggle('active', type === 'server-proc');
+      document.getElementById('btnCompSrvRaw').classList.toggle('active', type === 'server-raw');
+    }
+
+    /* ── CALCULATE ── */
+
+    function calculate() {
+      const rows = document.querySelectorAll('.item-row');
+      const results = [];
+
+      rows.forEach(row => {
+        const sel = row.querySelector('select');
+        const inp = row.querySelector('.units-inp');
+        const tierIdx = parseInt(row.dataset.tier) || 0;
+
+        const itemIdx = sel.value;
+        if (itemIdx === '') return;
+        const units = parseFloat(inp.value);
+        if (isNaN(units) || units < 1) return;
+
+        const item = items[parseInt(itemIdx)];
+        const tier = tiers[tierIdx];
+        const rowValue = Math.round(units * item.sellPrice * tier.mult);
+
+        results.push({ item, units, tier, tierIdx, rowValue });
+      });
+
+      if (results.length === 0) {
+        document.getElementById('resultCard').classList.remove('visible');
+        return;
+      }
+
+      const grandTotal = results.reduce((s, r) => s + r.rowValue, 0);
+      const compValue  = Math.round(grandTotal * compMults[compType]);
+
+      // Build per-row HTML
+      const container = document.getElementById('resultRows');
+      container.innerHTML = '';
+
+      results.forEach(r => {
+        const block = document.createElement('div');
+        block.className = 'result-item-block';
+
+        const header = document.createElement('div');
+        header.className = 'result-item-header';
+        header.innerHTML = `<span class="result-item-name">${r.item.name}</span>` +
+          `<span class="tier-badge">T${r.tier.label} · ${r.tier.mult}×</span>`;
+        block.appendChild(header);
+
+        const mkRow = (label, val, isLast, orange) => {
+          const d = document.createElement('div');
+          d.className = 'result-row' + (isLast ? ' no-border' : '');
+          d.innerHTML = `<span>${label}</span><span class="val${orange ? ' orange' : ''}">${val}</span>`;
+          return d;
+        };
+
+        block.appendChild(mkRow('Units', fmt(r.units), false, false));
+        block.appendChild(mkRow('Base price', '£' + fmt(r.item.sellPrice), false, false));
+        block.appendChild(mkRow('Row value', '£' + fmt(r.rowValue), true, true));
+
+        container.appendChild(block);
+      });
+
+      document.getElementById('resTotalValue').textContent = '£' + fmt(grandTotal);
+
+      const compBox = document.getElementById('compBox');
+      if (compType !== 'p2p') {
+        document.getElementById('compBoxLabel').textContent =
+          compType === 'server-proc' ? 'Server Comp — Processed Goods (70%)' : 'Server Comp — Unprocessed Goods (33%)';
+        document.getElementById('compBoxValue').textContent = '£' + fmt(compValue);
+        compBox.classList.add('visible');
+      } else {
+        compBox.classList.remove('visible');
+      }
+
+      document.getElementById('resultCard').classList.add('visible');
+    }
+
+    /* ── RESET ── */
+
+    function resetAll() {
+      document.getElementById('rowsContainer').innerHTML = '';
+      rowCounter = 0;
+      addRow();
+      setComp('p2p');
+      document.getElementById('compBox').classList.remove('visible');
+      document.getElementById('resultCard').classList.remove('visible');
+    }
+
+    /* ── INIT ── */
+    addRow();
+  </script>
+</body>
+</html>

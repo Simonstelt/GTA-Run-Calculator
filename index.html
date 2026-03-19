@@ -25,7 +25,20 @@
       align-items: center;
       gap: 14px;
       margin-bottom: 36px;
+      width: 100%;
+      max-width: 560px;
     }
+
+    .nav-link {
+      margin-left: auto;
+      color: #9aa0b8;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #f26419; }
     header img { width: 52px; height: 52px; border-radius: 8px; }
     header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: 0.02em; color: #ffffff; }
     header h1 span { color: #f26419; }
@@ -429,6 +442,7 @@
   <header>
     <img src="logo.png" alt="GTA Logo">
     <h1>GTA <span>Run</span> Calculator</h1>
+    <a href="staff.html" class="nav-link">Staff Comp →</a>
   </header>
 
   <div class="card">
