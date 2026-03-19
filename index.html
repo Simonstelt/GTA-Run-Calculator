@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA Run Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1d2e;
+      color: #ffffff;
+      font-family: 'Barlow', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    header img {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+    }
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+    }
+    header h1 span {
+      color: #f26419;
+    }
+
+    /* Card */
+    .card {
+      background: #242838;
+      border-radius: 12px;
+      padding: 28px 32px;
+      width: 100%;
+      max-width: 520px;
+      border: 1px solid #2e3347;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+    .field:last-of-type { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 8px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    select:focus, input[type="number"]:focus {
+      border-color: #f26419;
+    }
+    select option { background: #242838; }
+
+    /* Tier buttons */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+    .tier-btn {
+      background: #1a1d2e;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #9aa0b8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 10px 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .tier-btn:hover {
+      border-color: #f26419;
+      color: #f26419;
+    }
+    .tier-btn.active {
+      background: #f26419;
+      border-color: #f26419;
+      color: #ffffff;
+    }
+    .tier-btn .tier-num { display: block; font-size: 1rem; }
+    .tier-btn .tier-mult { display: block; font-size: 0.7rem; opacity: 0.85; }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 13px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: #f26419;
+      color: #ffffff;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: #2e3347;
+      color: #9aa0b8;
+    }
+    .btn-secondary:hover { background: #363c55; color: #ffffff; }
+
+    /* Result panel */
+    .result-card {
+      background: #242838;
+      border-radius: 12px;
+      padding: 24px 32px;
+      width: 100%;
+      max-width: 520px;
+      border: 1px solid #2e3347;
+      margin-top: 16px;
+      display: none;
+    }
+    .result-card.visible { display: block; }
+
+    .result-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 16px;
+    }
+
+    .result-item-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid #2e3347;
+      font-size: 0.95rem;
+      color: #cccccc;
+    }
+    .result-row:last-of-type { border-bottom: none; }
+    .result-row .val { font-weight: 600; color: #ffffff; }
+
+    .total-box {
+      margin-top: 20px;
+      background: #1a1d2e;
+      border: 1px solid #f26419;
+      border-radius: 10px;
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .total-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9aa0b8;
+      margin-bottom: 6px;
+    }
+    .total-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #f26419;
+      text-shadow: 0 0 20px rgba(242, 100, 25, 0.5), 0 0 40px rgba(242, 100, 25, 0.25);
+      letter-spacing: 0.01em;
+    }
+    .total-currency {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #9aa0b8;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 480px) {
+      .card, .result-card { padding: 20px 18px; }
+      .tier-grid { grid-template-columns: repeat(3, 1fr); }
+      header h1 { font-size: 1.4rem; }
+      .total-value { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="GTA Logo">
+    <h1>GTA <span>Run</span> Calculator</h1>
+  </header>
+
+  <div class="card">
+    <div class="field">
+      <label for="itemSelect">Item</label>
+      <select id="itemSelect">
+        <option value="">— Select an item —</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="unitsInput">Units</label>
+      <input type="number" id="unitsInput" min="1" placeholder="Enter quantity">
+    </div>
+
+    <div class="field">
+      <label>Processor Tier</label>
+      <div class="tier-grid" id="tierGrid"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+      <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-title">Run Summary</div>
+    <div class="result-item-name" id="resItemName"></div>
+    <div class="result-row">
+      <span>Weight per unit</span>
+      <span class="val" id="resWeightUnit"></span>
+    </div>
+    <div class="result-row">
+      <span>Total weight</span>
+      <span class="val" id="resWeightTotal"></span>
+    </div>
+    <div class="result-row">
+      <span>Base price per unit</span>
+      <span class="val" id="resBasePrice"></span>
+    </div>
+    <div class="result-row">
+      <span>Tier multiplier</span>
+      <span class="val" id="resTierMult"></span>
+    </div>
+    <div class="result-row">
+      <span>Price per unit (after tier)</span>
+      <span class="val" id="resPricePerUnit"></span>
+    </div>
+    <div class="total-box">
+      <div class="total-label">Total Run Value</div>
+      <div class="total-value" id="resTotalValue"></div>
+      <div class="total-currency">GTA Dollars</div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      { name: "Antique",                        weight: 25.0,  sellPrice: 144510 },
+      { name: "Apple",                           weight: 1.0,   sellPrice: 10 },
+      { name: "Bond",                            weight: 15.0,  sellPrice: 90319 },
+      { name: "Cat Shark",                       weight: 6.0,   sellPrice: 425 },
+      { name: "Cocaine [Grade 01]",              weight: 3.0,   sellPrice: 1052 },
+      { name: "Codeine [Grade 01]",              weight: 3.0,   sellPrice: 1052 },
+      { name: "Copper [Grade 01]",               weight: 3.0,   sellPrice: 701 },
+      { name: "Corn [Grade 01]",                 weight: 3.0,   sellPrice: 701 },
+      { name: "Cotton [Grade 01]",               weight: 3.0,   sellPrice: 701 },
+      { name: "Ecstasy [Grade 01]",              weight: 3.0,   sellPrice: 1052 },
+      { name: "Gemstone",                        weight: 10.0,  sellPrice: 45159 },
+      { name: "Gold Bullion",                    weight: 14.0,  sellPrice: 4053 },
+      { name: "Heroin [Grade 01]",               weight: 3.0,   sellPrice: 1052 },
+      { name: "Iron [Grade 01]",                 weight: 3.0,   sellPrice: 701 },
+      { name: "Ketamine [Grade 01]",             weight: 3.0,   sellPrice: 1052 },
+      { name: "Lead [Grade 01]",                 weight: 3.0,   sellPrice: 701 },
+      { name: "Ledger Nano X",                   weight: 10.0,  sellPrice: 45159 },
+      { name: "LSD [Grade 01]",                  weight: 3.0,   sellPrice: 1052 },
+      { name: "Mackerel",                        weight: 4.0,   sellPrice: 160 },
+      { name: "Marijuana [Grade 01]",            weight: 3.0,   sellPrice: 1052 },
+      { name: "Mounjaro Pen",                    weight: 5.0,   sellPrice: 22579 },
+      { name: "Mullet",                          weight: 4.0,   sellPrice: 300 },
+      { name: "Nike Air Yeezy 2 Red October",    weight: 5.0,   sellPrice: 35124 },
+      { name: "Ornate",                          weight: 2.0,   sellPrice: 80 },
+      { name: "Peach",                           weight: 1.0,   sellPrice: 10 },
+      { name: "RPUK Mission File",               weight: 7.5,   sellPrice: 42650 },
+      { name: "Salema",                          weight: 2.0,   sellPrice: 80 },
+      { name: "Seized Contraband",               weight: 40.0,  sellPrice: 220000 },
+      { name: "Silver Bullion",                  weight: 10.0,  sellPrice: 3051 },
+      { name: "Speed [Grade 01]",                weight: 3.0,   sellPrice: 1052 },
+      { name: "Stamp Collection",                weight: 5.0,   sellPrice: 28099 },
+      { name: "Sugar [Grade 01]",                weight: 3.0,   sellPrice: 701 },
+      { name: "Tin [Grade 01]",                  weight: 3.0,   sellPrice: 701 },
+      { name: "Tobacco [Grade 01]",              weight: 3.0,   sellPrice: 701 },
+      { name: "Tuna",                            weight: 6.0,   sellPrice: 625 },
+      { name: "Turtle",                          weight: 6.0,   sellPrice: 2000 },
+      { name: "Watermelon",                      weight: 1.0,   sellPrice: 10 },
+    ];
+
+    const tiers = [
+      { label: "1",  mult: 1 },
+      { label: "2",  mult: 1.15 },
+      { label: "3",  mult: 1.32 },
+      { label: "4",  mult: 1.52 },
+      { label: "5",  mult: 1.74 },
+      { label: "6",  mult: 2 },
+    ];
+
+    let selectedTier = 0; // index into tiers array
+
+    // Populate item dropdown (already sorted alphabetically in data)
+    const sel = document.getElementById('itemSelect');
+    items.forEach((item, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = item.name;
+      sel.appendChild(opt);
+    });
+
+    // Build tier buttons
+    const tierGrid = document.getElementById('tierGrid');
+    tiers.forEach((t, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'tier-btn' + (i === 0 ? ' active' : '');
+      btn.innerHTML = `<span class="tier-num">T${t.label}</span><span class="tier-mult">${t.mult}x</span>`;
+      btn.onclick = () => selectTier(i);
+      tierGrid.appendChild(btn);
+    });
+
+    function selectTier(i) {
+      selectedTier = i;
+      document.querySelectorAll('.tier-btn').forEach((b, idx) => {
+        b.classList.toggle('active', idx === i);
+      });
+    }
+
+    function fmt(n) {
+      return n.toLocaleString('en-GB');
+    }
+
+    function calculate() {
+      const itemIdx = document.getElementById('itemSelect').value;
+      const units = parseFloat(document.getElementById('unitsInput').value);
+
+      if (itemIdx === '' || isNaN(units) || units < 1) {
+        document.getElementById('resultCard').classList.remove('visible');
+        return;
+      }
+
+      const item = items[parseInt(itemIdx)];
+      const tier = tiers[selectedTier];
+      const totalValue = Math.round(units * item.sellPrice * tier.mult);
+      const pricePerUnit = Math.round(item.sellPrice * tier.mult);
+      const totalWeight = units * item.weight;
+
+      document.getElementById('resItemName').textContent = item.name;
+      document.getElementById('resWeightUnit').textContent = item.weight + ' kg';
+      document.getElementById('resWeightTotal').textContent = fmt(totalWeight) + ' kg';
+      document.getElementById('resBasePrice').textContent = '$' + fmt(item.sellPrice);
+      document.getElementById('resTierMult').textContent = tier.mult + 'x  (Tier ' + tier.label + ')';
+      document.getElementById('resPricePerUnit').textContent = '$' + fmt(pricePerUnit);
+      document.getElementById('resTotalValue').textContent = '$' + fmt(totalValue);
+
+      document.getElementById('resultCard').classList.add('visible');
+    }
+
+    function resetAll() {
+      document.getElementById('itemSelect').value = '';
+      document.getElementById('unitsInput').value = '';
+      selectTier(0);
+      document.getElementById('resultCard').classList.remove('visible');
+    }
+
+    // Allow Enter key to trigger calculate
+    document.getElementById('unitsInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') calculate();
+    });
+  </script>
+</body>
+</html>
