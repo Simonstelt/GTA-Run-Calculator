@@ -1,0 +1,36 @@
+Type,Vehicle Name,Virtual Inventory Capacity
+Vehicle,Quad Bike,4
+Vehicle,Hatchback,15
+Vehicle,SUV,25
+Vehicle,MB 4WD,35
+Vehicle,Offroad,50
+Vehicle,Hatchback (Sport),10
+Vehicle,Van (Transport),50
+Truck,Offroad (Covered),75
+Truck,Truck,150
+Truck,Van (Cargo),150
+Truck,Truck Boxer,200
+Truck,Zamak Transport,250
+Truck,Zamak Transport (Covered),325
+Truck,Zamak Repair,400
+Truck,Tempest Transport,550
+Truck,Tempest Transport (Covered),600
+Truck,Tempest Ammo,700
+Truck,HEMMT Transport,800
+Truck,HEMMT Transport (Covered),850
+Truck,HEMMT Ammo,900
+Truck,HEMMT Box,1000
+Truck,Tempest Repair,1200
+Helicopter,M-900,5
+Helicopter,MH9 Hummingbird,
+Helicopter,CH-49 Mohawk,5
+Helicopter,CH-67 Huron,5
+Helicopter,Taru Fuel Pod,350
+Helicopter,PO-30 Orca (Unarmed),5
+Helicopter,Mi-290 Taru,5
+Helicopter,WY-55 Hellcat (Unarmed),5
+Boat,Assault Boat,40
+Boat,Water Scooter,5
+Boat,Motorboat,220
+Boat,RHIB,220
+Boat,SDV,350

@@ -38,8 +38,25 @@
       letter-spacing: 0.02em;
       color: #ffffff;
     }
-    header h1 span {
+    header h1 span { color: #f26419; }
+
+    /* Section divider */
+    .section-divider {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: #f26419;
+      margin: 22px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #2e3347;
     }
 
     /* Card */
@@ -48,14 +65,20 @@
       border-radius: 12px;
       padding: 28px 32px;
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       border: 1px solid #2e3347;
     }
 
-    .field {
+    .field { margin-bottom: 20px; }
+    .field:last-of-type { margin-bottom: 0; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin-bottom: 20px;
     }
-    .field:last-of-type { margin-bottom: 0; }
+    .field-row .field { margin-bottom: 0; }
 
     label {
       display: block;
@@ -88,10 +111,29 @@
       padding-right: 36px;
       cursor: pointer;
     }
-    select:focus, input[type="number"]:focus {
-      border-color: #f26419;
+    select:focus, input[type="number"]:focus { border-color: #f26419; }
+    select option, select optgroup { background: #242838; }
+    select optgroup { color: #f26419; font-size: 0.8rem; font-style: normal; }
+
+    /* Vehicle capacity badge — shown next to units input */
+    .units-wrapper { position: relative; }
+    .cap-badge {
+      display: none;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #f26419;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      pointer-events: none;
+      white-space: nowrap;
     }
-    select option { background: #242838; }
+    .cap-badge.visible { display: block; }
 
     /* Tier buttons */
     .tier-grid {
@@ -113,15 +155,8 @@
       text-align: center;
       line-height: 1.3;
     }
-    .tier-btn:hover {
-      border-color: #f26419;
-      color: #f26419;
-    }
-    .tier-btn.active {
-      background: #f26419;
-      border-color: #f26419;
-      color: #ffffff;
-    }
+    .tier-btn:hover { border-color: #f26419; color: #f26419; }
+    .tier-btn.active { background: #f26419; border-color: #f26419; color: #ffffff; }
     .tier-btn .tier-num { display: block; font-size: 1rem; }
     .tier-btn .tier-mult { display: block; font-size: 0.7rem; opacity: 0.85; }
 
@@ -143,24 +178,18 @@
       transition: opacity 0.15s, transform 0.1s;
     }
     .btn:active { transform: scale(0.98); }
-    .btn-primary {
-      background: #f26419;
-      color: #ffffff;
-    }
+    .btn-primary { background: #f26419; color: #ffffff; }
     .btn-primary:hover { opacity: 0.9; }
-    .btn-secondary {
-      background: #2e3347;
-      color: #9aa0b8;
-    }
+    .btn-secondary { background: #2e3347; color: #9aa0b8; }
     .btn-secondary:hover { background: #363c55; color: #ffffff; }
 
-    /* Result panel */
+    /* ── Result panel ── */
     .result-card {
       background: #242838;
       border-radius: 12px;
       padding: 24px 32px;
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       border: 1px solid #2e3347;
       margin-top: 16px;
       display: none;
@@ -175,7 +204,6 @@
       color: #9aa0b8;
       margin-bottom: 16px;
     }
-
     .result-item-name {
       font-size: 1.1rem;
       font-weight: 700;
@@ -192,9 +220,57 @@
       font-size: 0.95rem;
       color: #cccccc;
     }
-    .result-row:last-of-type { border-bottom: none; }
+    .result-row.no-border { border-bottom: none; }
     .result-row .val { font-weight: 600; color: #ffffff; }
+    .result-row .val.orange { color: #f26419; }
 
+    /* Vehicle section inside result */
+    .vehicle-section {
+      display: none;
+      margin-top: 20px;
+      background: #1a1d2e;
+      border: 1px solid #2e3347;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .vehicle-section.visible { display: block; }
+
+    .vehicle-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #f26419;
+      margin-bottom: 12px;
+    }
+
+    /* Capacity bar */
+    .cap-bar-wrap {
+      margin-top: 10px;
+    }
+    .cap-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #9aa0b8;
+      margin-bottom: 5px;
+    }
+    .cap-bar-labels span { font-weight: 600; color: #ffffff; }
+    .cap-bar-track {
+      height: 8px;
+      background: #2e3347;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .cap-bar-fill {
+      height: 100%;
+      background: #f26419;
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+    .cap-bar-fill.over { background: #e0403a; }
+
+    /* Total box */
     .total-box {
       margin-top: 20px;
       background: #1a1d2e;
@@ -225,9 +301,31 @@
       margin-top: 2px;
     }
 
+    /* Full-vehicle value sub-box */
+    .full-vehicle-box {
+      margin-top: 12px;
+      background: #1e2235;
+      border: 1px solid #2e3347;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .full-vehicle-box .fv-label {
+      font-size: 0.8rem;
+      color: #9aa0b8;
+    }
+    .full-vehicle-box .fv-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f26419;
+    }
+
     @media (max-width: 480px) {
       .card, .result-card { padding: 20px 18px; }
       .tier-grid { grid-template-columns: repeat(3, 1fr); }
+      .field-row { grid-template-columns: 1fr; }
       header h1 { font-size: 1.4rem; }
       .total-value { font-size: 1.8rem; }
     }
@@ -241,20 +339,40 @@
   </header>
 
   <div class="card">
+
+    <!-- ── ITEM & UNITS ── -->
+    <div class="section-divider">Item &amp; Quantity</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="itemSelect">Item</label>
+        <select id="itemSelect" onchange="onItemChange()">
+          <option value="">— Select item —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="unitsInput">Units</label>
+        <div class="units-wrapper">
+          <input type="number" id="unitsInput" min="1" placeholder="Quantity">
+          <span class="cap-badge" id="capBadge">MAX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── VEHICLE ── -->
+    <div class="section-divider">Vehicle <span style="font-weight:400;color:#9aa0b8;font-size:0.65rem;letter-spacing:0">(optional)</span></div>
+
     <div class="field">
-      <label for="itemSelect">Item</label>
-      <select id="itemSelect">
-        <option value="">— Select an item —</option>
+      <label for="vehicleSelect">Vehicle</label>
+      <select id="vehicleSelect" onchange="onVehicleChange()">
+        <option value="">— No vehicle / manual units —</option>
       </select>
     </div>
 
-    <div class="field">
-      <label for="unitsInput">Units</label>
-      <input type="number" id="unitsInput" min="1" placeholder="Enter quantity">
-    </div>
+    <!-- ── TIER ── -->
+    <div class="section-divider">Processor Tier</div>
 
     <div class="field">
-      <label>Processor Tier</label>
       <div class="tier-grid" id="tierGrid"></div>
     </div>
 
@@ -264,9 +382,11 @@
     </div>
   </div>
 
+  <!-- ── RESULT ── -->
   <div class="result-card" id="resultCard">
     <div class="result-title">Run Summary</div>
     <div class="result-item-name" id="resItemName"></div>
+
     <div class="result-row">
       <span>Weight per unit</span>
       <span class="val" id="resWeightUnit"></span>
@@ -283,10 +403,41 @@
       <span>Tier multiplier</span>
       <span class="val" id="resTierMult"></span>
     </div>
-    <div class="result-row">
+    <div class="result-row no-border">
       <span>Price per unit (after tier)</span>
       <span class="val" id="resPricePerUnit"></span>
     </div>
+
+    <!-- Vehicle breakdown — only when vehicle selected -->
+    <div class="vehicle-section" id="vehicleSection">
+      <div class="vehicle-section-title">Vehicle Capacity</div>
+      <div class="result-row">
+        <span>Vehicle</span>
+        <span class="val" id="resVehicleName"></span>
+      </div>
+      <div class="result-row">
+        <span>Max inventory</span>
+        <span class="val" id="resVehicleCap"></span>
+      </div>
+      <div class="result-row no-border">
+        <span>Max units (full load)</span>
+        <span class="val orange" id="resMaxUnits"></span>
+      </div>
+      <div class="cap-bar-wrap">
+        <div class="cap-bar-labels">
+          Weight used <span id="resBarLabel">—</span>
+        </div>
+        <div class="cap-bar-track">
+          <div class="cap-bar-fill" id="capBarFill" style="width:0%"></div>
+        </div>
+      </div>
+      <!-- Full vehicle value (even if user typed fewer units) -->
+      <div class="full-vehicle-box" id="fullVehicleBox" style="display:none">
+        <span class="fv-label">Full vehicle value</span>
+        <span class="fv-value" id="resFullVehicleValue"></span>
+      </div>
+    </div>
+
     <div class="total-box">
       <div class="total-label">Total Run Value</div>
       <div class="total-value" id="resTotalValue"></div>
@@ -295,6 +446,7 @@
   </div>
 
   <script>
+    /* ── DATA ── */
     const items = [
       { name: "Antique",                        weight: 25.0,  sellPrice: 144510 },
       { name: "Apple",                           weight: 1.0,   sellPrice: 10 },
@@ -336,26 +488,90 @@
     ];
 
     const tiers = [
-      { label: "1",  mult: 1 },
-      { label: "2",  mult: 1.15 },
-      { label: "3",  mult: 1.32 },
-      { label: "4",  mult: 1.52 },
-      { label: "5",  mult: 1.74 },
-      { label: "6",  mult: 2 },
+      { label: "1", mult: 1 },
+      { label: "2", mult: 1.15 },
+      { label: "3", mult: 1.32 },
+      { label: "4", mult: 1.52 },
+      { label: "5", mult: 1.74 },
+      { label: "6", mult: 2 },
     ];
 
-    let selectedTier = 0; // index into tiers array
+    // Grouped vehicle data: null capacity = no virtual inventory
+    const vehicleGroups = [
+      { group: "Vehicle", vehicles: [
+        { name: "Quad Bike",            capacity: 4 },
+        { name: "Hatchback (Sport)",    capacity: 10 },
+        { name: "Hatchback",            capacity: 15 },
+        { name: "SUV",                  capacity: 25 },
+        { name: "MB 4WD",               capacity: 35 },
+        { name: "Offroad",              capacity: 50 },
+        { name: "Van (Transport)",      capacity: 50 },
+      ]},
+      { group: "Truck", vehicles: [
+        { name: "Offroad (Covered)",            capacity: 75 },
+        { name: "Truck",                        capacity: 150 },
+        { name: "Van (Cargo)",                  capacity: 150 },
+        { name: "Truck Boxer",                  capacity: 200 },
+        { name: "Zamak Transport",              capacity: 250 },
+        { name: "Zamak Transport (Covered)",    capacity: 325 },
+        { name: "Zamak Repair",                 capacity: 400 },
+        { name: "Tempest Transport",            capacity: 550 },
+        { name: "Tempest Transport (Covered)",  capacity: 600 },
+        { name: "Tempest Ammo",                 capacity: 700 },
+        { name: "HEMMT Transport",              capacity: 800 },
+        { name: "HEMMT Transport (Covered)",    capacity: 850 },
+        { name: "HEMMT Ammo",                   capacity: 900 },
+        { name: "HEMMT Box",                    capacity: 1000 },
+        { name: "Tempest Repair",               capacity: 1200 },
+      ]},
+      { group: "Helicopter", vehicles: [
+        { name: "M-900",                  capacity: 5 },
+        { name: "CH-49 Mohawk",           capacity: 5 },
+        { name: "CH-67 Huron",            capacity: 5 },
+        { name: "PO-30 Orca (Unarmed)",   capacity: 5 },
+        { name: "Mi-290 Taru",            capacity: 5 },
+        { name: "WY-55 Hellcat (Unarmed)",capacity: 5 },
+        { name: "Taru Fuel Pod",          capacity: 350 },
+        { name: "MH9 Hummingbird",        capacity: null },
+      ]},
+      { group: "Boat", vehicles: [
+        { name: "Water Scooter",  capacity: 5 },
+        { name: "Assault Boat",   capacity: 40 },
+        { name: "Motorboat",      capacity: 220 },
+        { name: "RHIB",           capacity: 220 },
+        { name: "SDV",            capacity: 350 },
+      ]},
+    ];
 
-    // Populate item dropdown (already sorted alphabetically in data)
-    const sel = document.getElementById('itemSelect');
+    let selectedTier = 0;
+
+    /* ── BUILD DROPDOWNS ── */
+
+    // Items
+    const itemSel = document.getElementById('itemSelect');
     items.forEach((item, i) => {
       const opt = document.createElement('option');
       opt.value = i;
       opt.textContent = item.name;
-      sel.appendChild(opt);
+      itemSel.appendChild(opt);
     });
 
-    // Build tier buttons
+    // Vehicles — grouped with optgroup
+    const vehSel = document.getElementById('vehicleSelect');
+    vehicleGroups.forEach(g => {
+      const grp = document.createElement('optgroup');
+      grp.label = g.group;
+      g.vehicles.forEach((v, i) => {
+        const opt = document.createElement('option');
+        opt.value = JSON.stringify({ group: g.group, name: v.name, capacity: v.capacity });
+        const capLabel = v.capacity !== null ? ` — ${v.capacity} kg` : ' — no inventory';
+        opt.textContent = v.name + capLabel;
+        grp.appendChild(opt);
+      });
+      vehSel.appendChild(grp);
+    });
+
+    // Tier buttons
     const tierGrid = document.getElementById('tierGrid');
     tiers.forEach((t, i) => {
       const btn = document.createElement('button');
@@ -365,6 +581,8 @@
       tierGrid.appendChild(btn);
     });
 
+    /* ── STATE & HANDLERS ── */
+
     function selectTier(i) {
       selectedTier = i;
       document.querySelectorAll('.tier-btn').forEach((b, idx) => {
@@ -372,13 +590,50 @@
       });
     }
 
-    function fmt(n) {
-      return n.toLocaleString('en-GB');
+    function getSelectedVehicle() {
+      const raw = document.getElementById('vehicleSelect').value;
+      if (!raw) return null;
+      return JSON.parse(raw);
     }
+
+    function getSelectedItem() {
+      const idx = document.getElementById('itemSelect').value;
+      if (idx === '') return null;
+      return items[parseInt(idx)];
+    }
+
+    function onItemChange() {
+      tryAutoFillUnits();
+    }
+
+    function onVehicleChange() {
+      tryAutoFillUnits();
+    }
+
+    function tryAutoFillUnits() {
+      const vehicle = getSelectedVehicle();
+      const item = getSelectedItem();
+      const badge = document.getElementById('capBadge');
+      const input = document.getElementById('unitsInput');
+
+      if (vehicle && vehicle.capacity !== null && item) {
+        const maxUnits = Math.floor(vehicle.capacity / item.weight);
+        input.value = maxUnits;
+        badge.classList.add('visible');
+      } else {
+        badge.classList.remove('visible');
+        // Don't wipe a manually entered value
+      }
+    }
+
+    /* ── CALCULATE ── */
+
+    function fmt(n) { return n.toLocaleString('en-GB'); }
 
     function calculate() {
       const itemIdx = document.getElementById('itemSelect').value;
       const units = parseFloat(document.getElementById('unitsInput').value);
+      const vehicle = getSelectedVehicle();
 
       if (itemIdx === '' || isNaN(units) || units < 1) {
         document.getElementById('resultCard').classList.remove('visible');
@@ -391,6 +646,7 @@
       const pricePerUnit = Math.round(item.sellPrice * tier.mult);
       const totalWeight = units * item.weight;
 
+      // ── Base rows ──
       document.getElementById('resItemName').textContent = item.name;
       document.getElementById('resWeightUnit').textContent = item.weight + ' kg';
       document.getElementById('resWeightTotal').textContent = fmt(totalWeight) + ' kg';
@@ -399,17 +655,64 @@
       document.getElementById('resPricePerUnit').textContent = '$' + fmt(pricePerUnit);
       document.getElementById('resTotalValue').textContent = '$' + fmt(totalValue);
 
+      // ── Vehicle section ──
+      const vSec = document.getElementById('vehicleSection');
+      const fullBox = document.getElementById('fullVehicleBox');
+
+      if (vehicle) {
+        const cap = vehicle.capacity;
+        vSec.classList.add('visible');
+
+        document.getElementById('resVehicleName').textContent = vehicle.name + '  (' + vehicle.group + ')';
+        document.getElementById('resVehicleCap').textContent = cap !== null ? fmt(cap) + ' kg' : 'No virtual inventory';
+
+        if (cap !== null) {
+          const maxUnits = Math.floor(cap / item.weight);
+          document.getElementById('resMaxUnits').textContent = fmt(maxUnits) + ' units';
+
+          const usedWeight = Math.min(totalWeight, cap);
+          const pct = Math.min((totalWeight / cap) * 100, 100);
+          const over = totalWeight > cap;
+
+          document.getElementById('resBarLabel').textContent =
+            fmt(totalWeight) + ' / ' + fmt(cap) + ' kg' + (over ? '  ⚠ OVER CAPACITY' : '');
+          const fill = document.getElementById('capBarFill');
+          fill.style.width = pct + '%';
+          fill.classList.toggle('over', over);
+
+          // Show full vehicle value only when user typed fewer than max
+          if (units < maxUnits) {
+            const fullValue = Math.round(maxUnits * item.sellPrice * tier.mult);
+            document.getElementById('resFullVehicleValue').textContent = '$' + fmt(fullValue);
+            fullBox.style.display = 'flex';
+          } else {
+            fullBox.style.display = 'none';
+          }
+        } else {
+          document.getElementById('resMaxUnits').textContent = '—';
+          document.getElementById('resBarLabel').textContent = '—';
+          document.getElementById('capBarFill').style.width = '0%';
+          fullBox.style.display = 'none';
+        }
+      } else {
+        vSec.classList.remove('visible');
+        fullBox.style.display = 'none';
+      }
+
       document.getElementById('resultCard').classList.add('visible');
     }
 
+    /* ── RESET ── */
     function resetAll() {
       document.getElementById('itemSelect').value = '';
       document.getElementById('unitsInput').value = '';
+      document.getElementById('vehicleSelect').value = '';
+      document.getElementById('capBadge').classList.remove('visible');
       selectTier(0);
       document.getElementById('resultCard').classList.remove('visible');
     }
 
-    // Allow Enter key to trigger calculate
+    // Enter key on units input
     document.getElementById('unitsInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') calculate();
     });
