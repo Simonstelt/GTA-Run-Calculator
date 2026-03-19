@@ -98,21 +98,40 @@
     select optgroup { color: #f26419; font-size: 0.8rem; font-style: normal; }
 
     .units-wrapper { position: relative; }
+    .units-stepper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .units-stepper input[type="number"] { flex: 1; min-width: 0; }
+    .step-btn {
+      flex-shrink: 0;
+      width: 38px;
+      height: 42px;
+      background: #2e3347;
+      border: 1px solid #3a3f58;
+      border-radius: 8px;
+      color: #9aa0b8;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+      padding: 0;
+      font-family: inherit;
+    }
+    .step-btn:hover { background: #3a3f58; color: #ffffff; border-color: #f26419; }
+    .step-btn:active { transform: scale(0.94); }
     .cap-badge {
       display: none;
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #f26419;
-      color: #fff;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 3px 7px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-      pointer-events: none;
-      white-space: nowrap;
+      letter-spacing: 0.05em;
+      color: #f26419;
+      margin-top: 5px;
     }
     .cap-badge.visible { display: block; }
 
@@ -364,8 +383,12 @@
       <div class="field">
         <label for="unitsInput">Units</label>
         <div class="units-wrapper">
-          <input type="number" id="unitsInput" min="1" placeholder="Quantity">
-          <span class="cap-badge" id="capBadge">MAX</span>
+          <div class="units-stepper">
+            <button class="step-btn" onclick="stepUnits(-1)" type="button">−</button>
+            <input type="number" id="unitsInput" min="1" placeholder="Qty">
+            <button class="step-btn" onclick="stepUnits(1)" type="button">+</button>
+          </div>
+          <span class="cap-badge" id="capBadge">Vehicle max auto-filled — adjust for personal carry</span>
         </div>
       </div>
     </div>
@@ -729,6 +752,13 @@
       } else {
         badge.classList.remove('visible');
       }
+    }
+
+    function stepUnits(delta) {
+      const input = document.getElementById('unitsInput');
+      const current = parseFloat(input.value) || 0;
+      const next = Math.max(1, current + delta);
+      input.value = next;
     }
 
     /* ── CALCULATE ── */
